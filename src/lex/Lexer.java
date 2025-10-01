@@ -90,21 +90,56 @@ public class Lexer {
 
         // Estados aceptores 1-char (según tu tabla)
         switch (q){
-          case 1 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.IDENT; }
-          case 2 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.NUMBER; }
-          case 3 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.ASIGNACION; }
-          case 4 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.CMP_IGUAL; }
-          case 5 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.NOT; }
-          case 6 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.CMP_DISTINTO; }
-          case 7 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.CMP_MENOR; }
-          case 8 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.CMP_MENOR_IG; }
-          case 9 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.CMP_MAYOR; }
-          case 10-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.CMP_MAYOR_IG; }
-          case 11-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.PAR_ABRE; }
-          case 12-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.PAR_CIERRA; }
-          case 13-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.LLAVE_ABRE; }
-          case 14-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.LLAVE_CIERRA; }
-          case 15-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.FIN_DE_LINEA; }
+	        case 1 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.IDENT; }
+	        case 2 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.NUMBER; }
+	        case 3 -> {
+	          lastAcc=q; lastLen=S.i-startI;
+	          String op = src.substring(startI, startI+lastLen);
+	          S.tokenCode = switch (op) {
+	            case "=" -> Tokens.ASIGNACION;
+	            case "<" -> Tokens.CMP_MENOR;
+	            case ">" -> Tokens.CMP_MAYOR;
+	            case "!" -> Tokens.NOT;
+	            default -> S.tokenCode;
+	          };
+	        }
+	        case 4 -> {
+	          lastAcc=q; lastLen=S.i-startI;
+	          String op = src.substring(startI, startI+lastLen);
+	          S.tokenCode = switch (op) {
+	            case "==" -> Tokens.CMP_IGUAL;
+	            case "<=" -> Tokens.CMP_MENOR_IG;
+	            case ">=" -> Tokens.CMP_MAYOR_IG;
+	            case "!=" -> Tokens.CMP_DISTINTO;
+	            default -> S.tokenCode;
+	          };
+	        }
+	        case 5 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.OP_SUMA; }
+	        case 6 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.OP_RESTA; }
+	        case 7 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.OP_MUL; }
+	        case 8 -> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.OP_DIV; }
+	        case 9 -> {
+	          lastAcc=q; lastLen=S.i-startI;
+	          String op = src.substring(startI, startI+lastLen);
+	          S.tokenCode = switch (op) {
+	            case ">" -> Tokens.CMP_MAYOR;
+	            case ">=" -> Tokens.CMP_MAYOR_IG;
+	            default -> S.tokenCode;
+	          };
+	        }
+	        case 10-> {
+	          lastAcc=q; lastLen=S.i-startI;
+	          String op = src.substring(startI, startI+lastLen);
+	          S.tokenCode = switch (op) {
+	            case ">=" -> Tokens.CMP_MAYOR_IG;
+	            default -> S.tokenCode;
+	          };
+	        }
+	        case 11-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.PAR_ABRE; }
+	        case 12-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.PAR_CIERRA; }
+	        case 13-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.LLAVE_ABRE; }
+	        case 14-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.LLAVE_CIERRA; }
+	        case 15-> { lastAcc=q; lastLen=S.i-startI; S.tokenCode=Tokens.FIN_DE_LINEA; }
         }
       }
     }
