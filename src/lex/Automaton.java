@@ -7,6 +7,7 @@ package lex;
  * columnas = [ letra, entero, {, }, (, ), ;, -, +, /, *, <, >, !, =, WS, EOF ]
  */
 final class Automaton {
+	// Constructor privado para impedir creación de instancias; la clase solo expone constantes.
   private Automaton(){}
 
   // === clases de caracteres (índices de columnas) ===

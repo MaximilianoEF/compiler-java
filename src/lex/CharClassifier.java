@@ -3,7 +3,11 @@ package lex;
 /** Convierte un carácter a la “clase de carácter” (columna de la matriz δ). */
 final class CharClassifier {
 
+	// Constructor privado para evitar instanciación; solo se usa de forma estática.
+	
 	private CharClassifier() {}
+	
+	// Determina la clase de carácter que corresponde al entero recibido según el autómata.
 	
 	public static int cls(int c){
 	  if (c==-1) return Automaton.C_EOF;

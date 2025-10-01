@@ -13,17 +13,23 @@ public class Lexer {
   private final String src;
   private final LexerState S = new LexerState();
 
+  // Constructor que recibe el programa fuente completo a analizar.
   public Lexer(String source){ this.src = source; }
 
+  // Devuelve el siguiente carácter sin consumirlo, o -1 si se llegó al final.
   private int peek(){ return (S.i >= src.length()) ? -1 : src.charAt(S.i); }
+  
+  // Avanza una posición en la cadena de entrada actualizando índice, línea y columna.
   private int adv(){
     int c = peek(); if (c==-1) return -1;
     S.i++; if (c=='\n'){ S.line++; S.col=1; } else S.col++;
     return c;
   }
+  
+  // Determina si el carácter corresponde a un espacio en blanco manejado manualmente.
   private static boolean isWS(int c){ return c==' '||c=='\t'||c=='\r'||c=='\n'; }
 
-  /** Salta blancos y descarta comentarios y antes del DFA. */
+  // Recorre la entrada descartando espacios y comentarios; retorna true si omitió algo.
   private boolean skipSpacesAndComments(){
     boolean skipped=false;
     while (true){
@@ -48,13 +54,17 @@ public class Lexer {
   /** Token resultante (código, lexema y posición). */
   public static class Tok {
     public final int code, line, col; public final String lex;
+    
+    // Construye un token con su código, lexema y posición en la fuente.
     Tok(int code, String lex, int line, int col){ this.code=code; this.lex=lex; this.line=line; this.col=col; }
+    
+    // Representa el token en una cadena legible para depuración o registros.
     @Override public String toString(){ return Tokens.name(code)+"('"+lex+"') @"+line+":"+col+" ["+code+"]"; }
   }
 
   private Tok lastTok = null;
 
-  /** Devuelve el siguiente token. */
+  /** Ejecuta el DFA y la lógica adicional para devolver el próximo token del flujo de entrada. */
   public Tok next(){
     lastTok = null;
     skipSpacesAndComments();
